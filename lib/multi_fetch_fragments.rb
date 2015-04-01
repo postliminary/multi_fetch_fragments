@@ -21,9 +21,12 @@ module MultiFetchFragments
         additional_cache_options = @options[:cache_options] || @locals[:cache_options] || {}
         keys_to_collection_map = {}
 
+        custom_cache_key = @options[:cache].respond_to?(:call)
+        custom_cache_key_arity = custom_cache_key ? @options[:cache].arity : nil
+
         @collection.each_with_index do |item, index|
-          key = if @options[:cache].respond_to?(:call) then
-                  if @options[:cache].arity > 1 then
+          key = if custom_cache_key then
+                  if custom_cache_key_arity > 1 then
                     @options[:cache].call(item, index)
                   else
                     @options[:cache].call(item)
