@@ -21,8 +21,8 @@ module MultiFetchFragments
         additional_cache_options = @options[:cache_options] || @locals[:cache_options] || {}
         keys_to_collection_map = {}
 
-        @collection.each do |item|
-          key = @options[:cache].respond_to?(:call) ? @options[:cache].call(item) : item
+        @collection.each_with_index do |item, index|
+          key = @options[:cache].respond_to?(:call) ? @options[:cache].call(item, index) : item
 
           key_with_optional_digest = nil
           if defined?(@view.fragment_name_with_digest)
