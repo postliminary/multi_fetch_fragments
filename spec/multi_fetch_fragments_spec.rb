@@ -21,7 +21,7 @@ describe MultiFetchFragments do
     
     cache_mock.should_receive(:read_multi).with(key).and_return({key => 'Hello'})
 
-    view.render(:partial => "views/customer", :collection => [ customer ], :cache => Proc.new{ |item| [item, 'key']}).should == "Hello"
+    view.render(:partial => "views/customer", :collection => [ customer ], :cache => lambda { |item| [item, 'key']}).should == "Hello"
   end
 
   it "works for passing in a custom key with index" do

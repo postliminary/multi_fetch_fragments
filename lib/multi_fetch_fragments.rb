@@ -22,7 +22,15 @@ module MultiFetchFragments
         keys_to_collection_map = {}
 
         @collection.each_with_index do |item, index|
-          key = @options[:cache].respond_to?(:call) ? @options[:cache].call(item, index) : item
+          key = if @options[:cache].respond_to?(:call) then
+                  if @options[:cache].arity > 1 then
+                    @options[:cache].call(item, index)
+                  else
+                    @options[:cache].call(item)
+                  end
+                else
+                  item
+                end
 
           key_with_optional_digest = nil
           if defined?(@view.fragment_name_with_digest)
